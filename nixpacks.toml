@@ -1,0 +1,12 @@
+# Railway uchun: botni repo ichidagi bot/ papkasidan ishga tushiradi
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["cd bot && npm install"]
+
+[phases.build]
+cmds = ["echo skip-build"]
+
+[start]
+cmd = "cd bot && node index.js"
