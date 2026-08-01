@@ -52,11 +52,23 @@ bot.catch((err) => {
   console.error("Bot xatosi:", err);
 });
 
-await bot.api.setMyCommands([
-  { command: "start", description: "Botni boshlash" },
-  { command: "shop", description: "Do'konni ochish" },
-  { command: "help", description: "Yordam" },
-]);
+try {
+  const me = await bot.api.getMe();
+  console.log("Bot ulandi: @" + me.username);
+  await bot.api.setMyCommands([
+    { command: "start", description: "Botni boshlash" },
+    { command: "shop", description: "Do'konni ochish" },
+    { command: "help", description: "Yordam" },
+  ]);
+} catch (e) {
+  console.error("BOT_TOKEN xato yoki internet yo'q:", e?.description || e?.message || e);
+  process.exit(1);
+}
+
+// Boshqa joyda polling ishlayotgan bo'lsa (409 Conflict) — webhookni o'chiramiz
+try {
+  await bot.api.deleteWebhook({ drop_pending_updates: false });
+} catch {}
 
 console.log("Bot started");
-bot.start();
+bot.start({ drop_pending_updates: true });
